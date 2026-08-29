@@ -4,3 +4,4 @@ venv/
 .env
 .DS_Store
 *.egg-info/
+phishing_module/data/

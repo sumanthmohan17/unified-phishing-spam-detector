@@ -239,6 +239,53 @@ def train_ensemble(
     return ensemble, metrics
 
 
+def train_on_real_data(
+    n_phishing: int = 300,
+    n_legitimate: int = 300,
+    visual_reference_dir: Optional[str] = None,
+    random_state: int = 42,
+) -> Tuple[StackingClassifier, dict]:
+    """
+    Fetch real phishing and legitimate URLs from the UCI PhiUSIIL Phishing URL
+    Dataset (id=967), extract live features, and train the Stacking Ensemble
+    classifier per Section 6.3 of the report.
+
+    Parameters
+    ----------
+    n_phishing : int, default=300
+        Target number of phishing URLs to sample from PhiUSIIL.
+    n_legitimate : int, default=300
+        Target number of legitimate URLs to sample from PhiUSIIL.
+    visual_reference_dir : Optional[str]
+        Optional path to reference images directory.
+    random_state : int, default=42
+        Random seed for reproducibility.
+
+    Returns
+    -------
+    tuple[StackingClassifier, dict]
+        Trained model and empirical validation metrics dictionary.
+    """
+    from .real_data_loader import build_real_training_dataset, fetch_and_label_urls
+
+    urls, labels = fetch_and_label_urls(
+        n_phishing=n_phishing,
+        n_legitimate=n_legitimate,
+        random_state=random_state,
+    )
+    X, y = build_real_training_dataset(
+        urls=urls,
+        labels=labels,
+        visual_reference_dir=visual_reference_dir,
+    )
+    model, metrics = train_ensemble(
+        training_data=X,
+        labels=y,
+        random_state=random_state,
+    )
+    return model, metrics
+
+
 def _extract_top_contributing_features(
     model: StackingClassifier,
     feature_vector: Dict[str, float],

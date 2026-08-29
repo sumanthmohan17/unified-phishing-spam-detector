@@ -14,6 +14,7 @@ from .classifier import (
     generate_synthetic_training_data,
     predict,
     train_ensemble,
+    train_on_real_data,
 )
 from .content_features import (
     extract_content_features,
@@ -22,6 +23,10 @@ from .content_features import (
 from .feature_extraction import (
     extract_url_features,
     extract_url_features_batch,
+)
+from .real_data_loader import (
+    build_real_training_dataset,
+    fetch_and_label_urls,
 )
 from .visual_similarity import (
     build_reference_library,
@@ -39,4 +44,7 @@ __all__ = [
     "train_ensemble",
     "predict",
     "generate_synthetic_training_data",
+    "fetch_and_label_urls",
+    "build_real_training_dataset",
+    "train_on_real_data",
 ]
