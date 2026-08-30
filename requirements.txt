@@ -11,4 +11,5 @@ requests>=2.31.0
 fastapi>=0.110.0
 uvicorn>=0.28.0
 ucimlrepo>=0.0.7
+pyarrow>=14.0.0
 

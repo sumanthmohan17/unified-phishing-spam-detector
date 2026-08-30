@@ -24,7 +24,8 @@ load_dotenv()
 
 # Import detection modules
 import phishing_module
-from phishing_module.classifier import generate_synthetic_training_data, predict, train_ensemble
+from phishing_module.classifier import predict, train_ensemble
+from phishing_module.real_data_loader import build_real_training_dataset, fetch_and_label_urls
 from phishing_module.visual_similarity import build_reference_library
 
 import threat_intel
@@ -43,13 +44,32 @@ GLOBAL_STATE: Dict[str, Any] = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Initialize and cache the ensemble model in memory at server startup."""
-    logger.info("Initializing Phishing Detection Stacking Ensemble model...")
-    X_syn, y_syn = generate_synthetic_training_data(n_samples=100, random_state=42)
-    model, metrics = train_ensemble(X_syn, y_syn, random_state=42)
+    """Initialize and cache the ensemble model in memory at server startup using real benchmark data."""
+    logger.info("=" * 70)
+    logger.info("SERVER STARTUP: Initializing Stacking Ensemble on Real PhiUSIIL Data")
+    logger.info("=" * 70)
+    logger.info("Step 1/3: Sourcing benchmark URLs from UCI PhiUSIIL repository...")
+    urls, labels = fetch_and_label_urls(n_phishing=300, n_legitimate=300, random_state=42)
+    logger.info(f"Loaded {len(urls)} real benchmark URLs (300 Phishing, 300 Legitimate).")
+
+    logger.info("Step 2/3: Extracting 16-signal feature vectors with live WHOIS queries...")
+    logger.info("Note: Feature extraction across 600 URLs performs DNS/WHOIS resolution.")
+    X_real, y_real = build_real_training_dataset(urls=urls, labels=labels)
+    logger.info(f"Feature matrix successfully constructed: X shape = {X_real.shape}, y shape = {y_real.shape}")
+
+    logger.info("Step 3/3: Training Random Forest + XGBoost Stacking Ensemble Classifier...")
+    model, metrics = train_ensemble(training_data=X_real, labels=y_real, random_state=42)
     GLOBAL_STATE["phishing_model"] = model
     GLOBAL_STATE["model_metrics"] = metrics
-    logger.info(f"Model initialized successfully. Accuracy on validation split: {metrics['accuracy']:.2%}")
+
+    logger.info("=" * 70)
+    logger.info(f"MODEL INITIALIZATION COMPLETE (Empirical PhiUSIIL Benchmark Metrics):")
+    logger.info(f"  • Validation Accuracy : {metrics['accuracy']:.2%}")
+    logger.info(f"  • Precision           : {metrics['precision']:.2%}")
+    logger.info(f"  • Recall              : {metrics['recall']:.2%}")
+    logger.info(f"  • F1-Score            : {metrics['f1_score']:.2%}")
+    logger.info("API server is now ready to receive requests.")
+    logger.info("=" * 70)
     yield
     GLOBAL_STATE.clear()
 

@@ -183,21 +183,22 @@ def train_ensemble(
 
     # Base estimators
     xgb_base = XGBClassifier(
-        n_estimators=50,
-        max_depth=3,
-        learning_rate=0.1,
+        n_estimators=100,
+        max_depth=5,
+        learning_rate=0.08,
         random_state=random_state,
         eval_metric="logloss",
     )
     rf_base = RandomForestClassifier(
-        n_estimators=50,
-        max_depth=4,
+        n_estimators=100,
+        max_depth=None,
+        min_samples_leaf=1,
         random_state=random_state,
     )
 
     # Meta-estimator combining stream outputs
     meta_rf = RandomForestClassifier(
-        n_estimators=30,
+        n_estimators=50,
         max_depth=3,
         random_state=random_state,
     )
@@ -242,13 +243,15 @@ def train_ensemble(
 def train_on_real_data(
     n_phishing: int = 300,
     n_legitimate: int = 300,
+    n_complex_legitimate: int = 100,
     visual_reference_dir: Optional[str] = None,
     random_state: int = 42,
 ) -> Tuple[StackingClassifier, dict]:
     """
     Fetch real phishing and legitimate URLs from the UCI PhiUSIIL Phishing URL
-    Dataset (id=967), extract live features, and train the Stacking Ensemble
-    classifier per Section 6.3 of the report.
+    Dataset (id=967) augmented with realistic complex-path legitimate URLs,
+    extract live features, and train the Stacking Ensemble classifier per
+    Section 6.3 of the report.
 
     Parameters
     ----------
@@ -256,6 +259,8 @@ def train_on_real_data(
         Target number of phishing URLs to sample from PhiUSIIL.
     n_legitimate : int, default=300
         Target number of legitimate URLs to sample from PhiUSIIL.
+    n_complex_legitimate : int, default=100
+        Number of augmented complex-path legitimate URLs.
     visual_reference_dir : Optional[str]
         Optional path to reference images directory.
     random_state : int, default=42
@@ -271,6 +276,7 @@ def train_on_real_data(
     urls, labels = fetch_and_label_urls(
         n_phishing=n_phishing,
         n_legitimate=n_legitimate,
+        n_complex_legitimate=n_complex_legitimate,
         random_state=random_state,
     )
     X, y = build_real_training_dataset(
@@ -361,9 +367,9 @@ def _extract_top_contributing_features(
 
 def predict(
     url: str,
-    screenshot_path: Optional[str],
-    page_text: str,
-    model: StackingClassifier,
+    screenshot_path: Optional[str] = None,
+    page_text: str = "",
+    model: Optional[StackingClassifier] = None,
     reference_dir: Optional[str] = None,
     precomputed_library: Optional[Dict[str, Any]] = None,
     top_k: int = 5,

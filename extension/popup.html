@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Phishing Detector</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo-group">
+        <img src="icons/icon48.png" alt="Logo" class="logo-img">
+        <div>
+          <h1 class="title">Phishing Detector</h1>
+          <p class="subtitle">AI & Threat Intel Defense</p>
+        </div>
+      </div>
+      <div id="server-status-pill" class="status-pill status-checking">
+        <span class="status-dot"></span>
+        <span id="server-status-text">Checking...</span>
+      </div>
+    </header>
+
+    <!-- Current Tab URL Box -->
+    <div class="url-card">
+      <span class="url-label">ACTIVE TAB URL</span>
+      <div id="tab-url" class="url-text" title="Current Page URL">Loading URL...</div>
+    </div>
+
+    <!-- Offline Alert Banner -->
+    <div id="offline-banner" class="alert-banner hidden">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-content">
+        <strong>Local Server Not Running</strong>
+        <p>Start the backend server on port 8000:</p>
+        <code>python -m api_server.run_server</code>
+        <button id="btn-retry-connection" class="btn-retry">Retry Connection</button>
+      </div>
+    </div>
+
+    <!-- Main Verdict Card -->
+    <div id="verdict-card" class="card verdict-card verdict-neutral">
+      <div class="verdict-header">
+        <div id="verdict-icon" class="verdict-icon-container">🛡️</div>
+        <div class="verdict-title-group">
+          <div id="verdict-badge" class="verdict-badge">ANALYZING...</div>
+          <div id="confidence-text" class="confidence-text">Evaluating structural signals</div>
+        </div>
+      </div>
+
+      <!-- Confidence Bar -->
+      <div class="confidence-bar-bg">
+        <div id="confidence-bar-fill" class="confidence-bar-fill" style="width: 0%;"></div>
+      </div>
+
+      <!-- Top Feature Signals -->
+      <div id="features-section" class="features-section">
+        <span class="section-label">TOP DETECTED SIGNALS</span>
+        <div id="features-chips" class="features-chips">
+          <span class="chip chip-neutral">Extracting features...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action & Explainability Section -->
+    <div class="card explanation-section">
+      <button id="btn-explain" class="btn-explain">
+        <span class="btn-icon">✨</span>
+        <span id="btn-explain-text">Get Detailed Explanation</span>
+      </button>
+
+      <!-- Loading State -->
+      <div id="explain-loading" class="explain-loading hidden">
+        <div class="spinner"></div>
+        <p class="loading-msg">Cross-validating with VirusTotal, Safe Browsing & Groq LLM...</p>
+      </div>
+
+      <!-- Detailed Results Container -->
+      <div id="detailed-results" class="detailed-results hidden">
+        <!-- Recommended Action -->
+        <div class="action-banner">
+          <span class="action-label">RECOMMENDED ACTION:</span>
+          <span id="action-pill" class="action-pill action-safe">SAFE</span>
+        </div>
+
+        <!-- LLM Explanation Text -->
+        <div class="llm-box">
+          <div class="llm-header">
+            <span>AI Threat Assessment</span>
+            <span class="llm-model-tag">Groq / Llama-3</span>
+          </div>
+          <p id="llm-explanation-text" class="llm-text"></p>
+        </div>
+
+        <!-- Threat Intelligence Sources -->
+        <div class="threat-intel-box">
+          <div class="intel-header">Live Threat Intelligence</div>
+          <div class="intel-grid">
+            <div class="intel-item">
+              <span class="intel-name">VirusTotal:</span>
+              <span id="intel-vt-status" class="intel-val">Clean</span>
+            </div>
+            <div class="intel-item">
+              <span class="intel-name">Google Safe Browsing:</span>
+              <span id="intel-gsb-status" class="intel-val">Clean</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>Unified Phishing Detection </span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
