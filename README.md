@@ -46,9 +46,9 @@ Full architecture and methodology are documented in the [project report](#report
 | Module 2 — Email Spam Classification (TF-IDF + NB + XGBoost) | ✅ Complete |
 | Module 2 — Embedded URL routing into Module 1 | ✅ Complete |
 | Module 3 — LLM Explainability Layer (Groq API) | ✅ Complete |
-| Threat Intelligence Cross-Validation (VirusTotal / Safe Browsing) | 🔲 Not started |
-| Chrome Extension | 🔲 Not started |
-| Streamlit Dashboard | 🔲 Not started |
+| Threat Intelligence Cross-Validation (VirusTotal / Safe Browsing) | ✅ Complete |
+| Chrome Extension | ✅ Complete |
+| Streamlit Dashboard | ✅ Complete |
 
 **Important:** all testing so far uses synthetic/placeholder training and reference data (hand-constructed URLs, generated logo images, hand-written text samples) to verify code correctness end-to-end. Real-world training and accuracy evaluation on benchmark datasets (PhishTank, UCI ML Phishing Dataset, Enron/SpamAssassin) is planned for a later phase — see [Future Scope](#future-scope). The LLM explanation layer, however, makes real calls to the Groq API and has been verified against actual model output.
 
