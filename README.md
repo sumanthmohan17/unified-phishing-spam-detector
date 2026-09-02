@@ -1,6 +1,5 @@
 # Unified Phishing and Email Spam Detection System Using Machine Learning
 
-> Main Project Phase-I (23CS605) — Department of Computer Science and Engineering, Malnad College of Engineering, Hassan (VTU) — 2025-2026
 
 Existing phishing and spam detection systems work in isolation, lacking transparency and real-time adaptability. This project unifies both into a single, explainable pipeline: a multi-signal phishing detector, an email spam classifier, an LLM-generated explanation layer, and real-time cross-validation against live threat intelligence feeds.
 
