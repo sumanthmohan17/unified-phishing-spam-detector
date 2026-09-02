@@ -3,7 +3,7 @@
 
 Existing phishing and spam detection systems work in isolation, lacking transparency and real-time adaptability. This project unifies both into a single, explainable pipeline: a multi-signal phishing detector, an email spam classifier, an LLM-generated explanation layer, and real-time cross-validation against live threat intelligence feeds.
 
-**Status: Phase-I in progress.** Modules 1, 2, and 3 are complete and verified. See [Build Status](#build-status) below.
+**Status: In progress.** Modules 1, 2, and 3 are complete and verified. See [Build Status](#build-status) below.
 
 ---
 
