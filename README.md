@@ -7,18 +7,6 @@ Existing phishing and spam detection systems work in isolation, lacking transpar
 
 ---
 
-## Team
-
-| Name | USN |
-|---|---|
-| Ritish Sharma | 4MC23CS137 |
-| Sumanth Mohan | 4MC23CS162 |
-| Tejaswi B N | 4MC23CS172 |
-| Jeevan Y R | 4MC24CS408 |
-
-**Guide:** Mr. Keerthi K.S., Assistant Professor, Dept. of CSE, MCE
-
----
 
 ## Overview
 
